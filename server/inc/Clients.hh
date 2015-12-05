@@ -4,7 +4,7 @@
 class Client
 {
 public:
-  Client();
+  Client(const int, const char *);
   ~Client();
   const std::string		&readFrom();
   void				writeTo(const std::string &);
