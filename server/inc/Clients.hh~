@@ -1,9 +1,0 @@
-#include <string>
-
-class Client
-{
-public:
-  Client();
-  ~Client();
-
-};
