@@ -17,10 +17,10 @@ Func Server()
 	until $socket <> -1
 	TCPCloseSocket($iListenSocket)
 	Do
-		$str = TCPRecv($socket, 4)
+		$str = TCPRecv($socket, 20)
 		if ($str <> "") then
 			MsgBox(0, "Test", $str)
 		EndIf
-	until $str = "toto"
+	until false
 	TCPCloseSocket($socket)
 
