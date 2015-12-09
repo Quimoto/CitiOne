@@ -6,6 +6,7 @@
 #include <arpa/inet.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <stdlib.h>
 #include "Client.hh"
 
 class		Connexion
@@ -13,8 +14,10 @@ class		Connexion
 public:
   Connexion(const int);
   ~Connexion();
-  void							newConnexion();
-
+  bool							newConnexion();
+  void							waitConnexion();
+  int							checkMaxFd(fd_set *);
+ 
 private:
   std::string						ip;
   std::list<Client*>					listClient;
