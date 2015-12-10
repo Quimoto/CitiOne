@@ -14,11 +14,12 @@ class		Connexion
 public:
   Connexion(const int);
   ~Connexion();
-  bool							newConnexion();
   void							waitConnexion();
-  int							checkMaxFd(fd_set *);
  
 private:
+  int							checkMaxFd(fd_set *);
+  bool							newConnexion();
+  
   std::string						ip;
   std::list<Client*>					listClient;
   int							port;

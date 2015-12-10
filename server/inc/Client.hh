@@ -8,7 +8,7 @@ class Client
 public:
   Client(const int, const char *);
   ~Client();
-  void				readFrom();
+  bool				readFrom();
   //void				writeTo(const std::string &);
   int				getFD() const;
 private:

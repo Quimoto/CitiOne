@@ -2,8 +2,9 @@
 
 Client::Client(const int _fd, const char *_ip)
 {
-  std::string		nameFile(ip);
-  
+  std::string		nameFile("../logs/");
+
+  nameFile.append(_ip);
   nameFile.append(".log");
   this->ip.assign(_ip);
   this->fd = _fd;
@@ -19,30 +20,37 @@ Client::~Client()
   delete (this->fileClient);
 }
 
-void				Client::readFrom()
+#include <string.h>
+
+bool				Client::readFrom()
 {
   char				str[50];
   std::string			text;
-  
-  read(this->fd, &str[0], 50);
+  int				i = 0;
+
+  bzero(str, 49);
+  if (read(this->fd, &str[0], 49) < 0)
+    {
+      std::cout << "SERVER: " << this->ip << " has left !" << std::endl;
+      return false;
+    }
+  while (str[i] >= 32 && str[i] <= 126 && i < 49)
+    i++;
+  str[i] = '\0';
   text.assign(str);
-  text = text.substr(0, text.find('\n'));
-  std::cout << "text = " << str << std::endl;
   this->writeInFile(text);
+  return true;
 }
 
 void				Client::writeInFile(const std::string &text)
 {
   if (*(this->fileClient))
     {
-      std::cout << "Write in file" << std::endl;
+      if (text.size() > 1)
+	*(this->fileClient) << std::endl;
       *(this->fileClient) << text;
-      this->currentPad++;
-      if (this->currentPad >= pad)
-	{
-	  this->currentPad = 0;
-	  *(this->fileClient) << std::endl;
-	}
+      if (text.size() > 1)
+	*(this->fileClient) << std::endl;
     }
 }
 

@@ -25,17 +25,24 @@ Connexion::Connexion(const int _port)
       std::cerr << "Listen failed" << std::endl;
       exit(-1);
     }
-  this->waitConnexion();
 }
 
 Connexion::~Connexion()
-{}
+{
+  while (this->listClient.empty() != true)
+    {
+      delete (this->listClient.front());
+      this->listClient.pop_front();
+    }
+  std::cout << "Server Shutdown" << std::endl;
+}
 
 bool		Connexion::newConnexion()
 {
   int		fd;
   char		*ip;
-  
+
+  std::cout << "SERVER : New Client" << std::endl;
   if ((fd = accept(this->socket_fd, (struct sockaddr*)&this->sin_client, (socklen_t*)&this->client_len)) == -1)
     {
       std::cerr << "Accept failed" << std::endl;
@@ -51,21 +58,25 @@ void		Connexion::waitConnexion()
   fd_set		readfds;
   int			fd_max;
   std::list<Client*>::iterator	it;
+  //char				readend[50];
   
   while (true)
     {
       fd_max = checkMaxFd(&readfds);
       if (select(fd_max + 1, &readfds, NULL, NULL, NULL) == -1)
-	  printf("ERROR: Select failed !\n");
+	std::cout << "SERVER: Select failed !" << std::endl;
       else
 	{
-	  //(FD_ISSET(0, &readfds)) ? end = serverCommand(bag) : end;
 	  if (FD_ISSET(this->socket_fd, &readfds))
 	    this->newConnexion();
 	  for (it = this->listClient.begin(); it != this->listClient.end(); ++it)
 	    {
 	      if (FD_ISSET((*it)->getFD(), &readfds))
-		  (*it)->readFrom();
+		if ((*it)->readFrom() == false)
+		  {
+		    this->listClient.erase(it);
+		    break;
+		  }
 	    }
 	}
     }
@@ -79,7 +90,6 @@ int             Connexion::checkMaxFd(fd_set *readfds)
   fd_max = this->socket_fd;
   FD_ZERO(readfds);
   FD_SET(this->socket_fd, readfds);
-  //FD_SET(0, readfds);
   for (it = this->listClient.begin(); it != this->listClient.end(); ++it)
     {
       FD_SET((*it)->getFD(), readfds);
