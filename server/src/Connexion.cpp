@@ -58,13 +58,13 @@ void		Connexion::waitConnexion()
   fd_set		readfds;
   int			fd_max;
   std::list<Client*>::iterator	it;
-  //char				readend[50];
-  
+
+  std::cout << "Server Open" << std::endl;
   while (true)
     {
       fd_max = checkMaxFd(&readfds);
       if (select(fd_max + 1, &readfds, NULL, NULL, NULL) == -1)
-	std::cout << "SERVER: Select failed !" << std::endl;
+	std::cerr << "SERVER: Select failed !" << std::endl;
       else
 	{
 	  if (FD_ISSET(this->socket_fd, &readfds))
