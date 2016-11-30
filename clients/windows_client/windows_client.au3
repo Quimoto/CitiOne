@@ -215,7 +215,7 @@ Func	Connexion($numbertime)
 
 	TCPStartup()
 
-	Local	$ip = "78.235.98.37"
+	Local	$ip = "00.000.00.00"
 	Local	$port = 65432
 
 	Global	$socket = TCPConnect($ip, $port)
